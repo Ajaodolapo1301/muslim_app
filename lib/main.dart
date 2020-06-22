@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:muslim_app/Provider/QuranModel.dart';
 import 'package:muslim_app/Provider/appState.dart';
 import 'package:muslim_app/screen/splashPage.dart';
 
@@ -18,7 +19,7 @@ Future<void> main() async{
 //  User user = box.get('user', defaultValue: null);
   runApp(MultiProvider(
       providers: [
-//        ChangeNotifierProvider(create: (_)=>LoginState()),
+        ChangeNotifierProvider(create: (_)=>QuranModel()),
         ChangeNotifierProvider(create: (_) => AppState()),
 
 

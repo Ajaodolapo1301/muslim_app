@@ -30,6 +30,7 @@ dependencies:
   flutter_custom_clippers: ^1.1.1
   font_awesome_flutter: ^8.8.1
   auto_size_text: ^2.1.0
+  http:
 
 dev_dependencies:
   flutter_test:

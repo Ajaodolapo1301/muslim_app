@@ -13,26 +13,21 @@ enum Difficulty {
 
 
 
-class Question {
-  final String categoryName;
-  final Type type;
-  final Difficulty difficulty;
-  final String question;
-  final String correctAnswer;
-  final List<dynamic> incorrectAnswers;
+class Question{
+  String type;
+  String level;
+  String question;
+   String id;
+   List options;
+   Question({this.options, this.level, this.type, this.id,this.question});
 
-  Question({this.categoryName, this.type, this.difficulty, this.question, this.correctAnswer, this.incorrectAnswers});
+   factory Question.fromJson(Map <String,  dynamic> json)=>Question(
+      type : json['type'],
+      id: json["_id"],
+       question: json["question"],
+       level : json["level"],
+     options: json["options"],
 
 
-  Question.fromMap(Map<String, dynamic> data):
-        categoryName = data["category"],
-        type = data["type"] == "multiple" ? Type.multiple : Type.boolean,
-        difficulty = data["difficulty"] == "easy" ? Difficulty.easy : data["difficulty"] == "medium" ? Difficulty.medium : Difficulty.hard,
-        question = data["question"],
-        correctAnswer = data["correct_answer"],
-        incorrectAnswers = data["incorrect_answers"];
-
-  static List<Question> fromData(List<Map<String,dynamic>> data){
-    return data.map((question) => Question.fromMap(question)).toList();
-  }
+  );
 }

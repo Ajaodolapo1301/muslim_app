@@ -12,9 +12,9 @@ class Category{
 
 
 final List<Category> categories = [
-  Category(1,"Quran", icon: FontAwesomeIcons.quran),
-  Category(2,"Hadith", icon: FontAwesomeIcons.mosque),
-  Category(3,"Fiqh", icon: FontAwesomeIcons.broadcastTower),
-  Category(4,"Sunnah", icon: FontAwesomeIcons.calendar ),
+  Category(1,"quran", icon: FontAwesomeIcons.quran),
+  Category(2,"hadith", icon: FontAwesomeIcons.mosque),
+  Category(3,"fiqh", icon: FontAwesomeIcons.broadcastTower),
+  Category(4,"sunnah", icon: FontAwesomeIcons.calendar ),
 
 ];

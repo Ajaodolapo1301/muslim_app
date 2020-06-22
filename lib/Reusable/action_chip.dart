@@ -1,5 +1,11 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:muslim_app/Model/category.dart';
+import 'package:muslim_app/Model/question.dart';
+import 'package:muslim_app/Provider/QuranModel.dart';
+import 'package:muslim_app/api/quranApi.dart';
+import 'package:muslim_app/screen/Quran.dart';
+import 'package:provider/provider.dart';
 
 class QuizOptionsDialog extends StatefulWidget {
   final Category category;
@@ -10,11 +16,15 @@ class QuizOptionsDialog extends StatefulWidget {
   _QuizOptionsDialogState createState() => _QuizOptionsDialogState();
 }
 
-class _QuizOptionsDialogState extends State<QuizOptionsDialog> {
+class _QuizOptionsDialogState extends State<QuizOptionsDialog> with AfterLayoutMixin<QuizOptionsDialog> {
   int _noOfQuestions;
   String _difficulty;
   bool processing;
-
+  QuranModel quranModel;
+   List <Question> _quran = [];
+   bool loading = false;
+   bool _error = false;
+   Category category ;
   @override
   void initState() {
     super.initState();
@@ -24,7 +34,12 @@ class _QuizOptionsDialogState extends State<QuizOptionsDialog> {
   }
 
   @override
+  void afterFirstLayout(BuildContext context) {
+  }
+
+  @override
   Widget build(BuildContext context){
+    quranModel = Provider.of<QuranModel>(context);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -119,9 +134,9 @@ class _QuizOptionsDialogState extends State<QuizOptionsDialog> {
             ),
           ),
           SizedBox(height: 20.0),
-          processing ? CircularProgressIndicator() : RaisedButton(
-            child: Text("Start Quiz"),
-//            onPressed: _startQuiz,
+          loading ? CircularProgressIndicator() : RaisedButton(
+            child: Text( "Start Quiz"),
+            onPressed:  _startQuiz,
           ),
           SizedBox(height: 20.0),
         ],
@@ -138,37 +153,39 @@ class _QuizOptionsDialogState extends State<QuizOptionsDialog> {
   _selectDifficulty(String s) {
     setState(() {
       _difficulty=s;
+      print(_difficulty);
     });
   }
 
-//  void _startQuiz() async {
-//    setState(() {
-//      processing=true;
-//    });
-//    try {
-//      List<Question> questions =  await getQuestions(widget.category, _noOfQuestions, _difficulty);
-//      Navigator.pop(context);
-//      if(questions.length < 1) {
-//        Navigator.of(context).push(MaterialPageRoute(
-//            builder: (_) => ErrorPage(message: "There are not enough questions in the category, with the options you selected.",)
-//        ));
-//        return;
-//      }
-//      Navigator.push(context, MaterialPageRoute(
-//          builder: (_) => QuizPage(questions: questions, category: widget.category,)
-//      ));
-//    }on SocketException catch (_) {
-//      Navigator.pushReplacement(context, MaterialPageRoute(
-//          builder: (_) => ErrorPage(message: "Can't reach the servers, \n Please check your internet connection.",)
-//      ));
-//    } catch(e){
-//      print(e.message);
-//      Navigator.pushReplacement(context, MaterialPageRoute(
-//          builder: (_) => ErrorPage(message: "Unexpected error trying to connect to the API",)
-//      ));
-//    }
-//    setState(() {
-//      processing=false;
-//    });
-//  }
+
+
+  void _startQuiz() async {
+    setState(() {
+      loading = true;
+    });
+    print("ssssssss${widget.category.name}");
+    print(_difficulty);
+    quranModel.getQuran(type: widget.category.name,  level: _difficulty).then((result){
+      print(result);
+      if(result["error"]== false){
+        setState(() {
+          _quran = result['question'];
+          loading = false;
+
+          _error = false;
+          print("ooooo$_quran}");
+        });
+        print(_quran.length);
+      }else{
+        setState(() {
+          loading = false;
+          _error = true;
+
+        });
+      }
+    });
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>QuranPage()));
+
+
+  }
 }
