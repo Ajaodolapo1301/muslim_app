@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:muslim_app/Model/category.dart';
 import 'package:muslim_app/Model/question.dart';
 import 'package:muslim_app/Provider/QuranModel.dart';
-import 'package:muslim_app/api/quranApi.dart';
 import 'package:muslim_app/screen/Quran.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +20,7 @@ class _QuizOptionsDialogState extends State<QuizOptionsDialog> with AfterLayoutM
   String _difficulty;
   bool processing;
   QuranModel quranModel;
-   List <Question> _quran = [];
+   List <Question> quran = [];
    bool loading = false;
    bool _error = false;
    Category category ;
@@ -169,13 +168,13 @@ class _QuizOptionsDialogState extends State<QuizOptionsDialog> with AfterLayoutM
       print(result);
       if(result["error"]== false){
         setState(() {
-          _quran = result['question'];
+          quran = result['question'];
           loading = false;
 
           _error = false;
-          print("ooooo$_quran}");
+          print("ooooo$quran");
         });
-        print(_quran.length);
+        print(quran.length);
       }else{
         setState(() {
           loading = false;
@@ -184,7 +183,9 @@ class _QuizOptionsDialogState extends State<QuizOptionsDialog> with AfterLayoutM
         });
       }
     });
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>QuranPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizPage(
+      question: quran
+    )));
 
 
   }

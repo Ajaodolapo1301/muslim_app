@@ -13,14 +13,17 @@ import 'package:provider/provider.dart';
 
 
 
-class QuranPage extends StatefulWidget {
+class QuizPage extends StatefulWidget {
+
+  final List<Question> question;
+  QuizPage({this.question});
   @override
-  _QuranPageState createState() => _QuranPageState();
+  _QuizPageState createState() => _QuizPageState();
 }
 
-class _QuranPageState extends State<QuranPage> with AfterLayoutMixin<QuranPage>{
+class _QuizPageState extends State<QuizPage> with AfterLayoutMixin<QuizPage>{
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  var questionNumber =  1;
+  var questionNumber =  0;
   int radioValue = 0;
   var _counter = 0;
 AppState appState;
@@ -69,6 +72,10 @@ AppState appState;
   void initState() {
     startTimer();
     super.initState();
+
+
+
+    questionNumber = 0;
   }
 
   @override
@@ -80,8 +87,8 @@ AppState appState;
 
   @override
   Widget build(BuildContext context) {
-quranModel = Provider.of<QuranModel>(context);
-
+    quranModel = Provider.of<QuranModel>(context);
+    print(widget.question[0].question);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -121,9 +128,9 @@ quranModel = Provider.of<QuranModel>(context);
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Question $_counter", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                Text("Question ${quranModel.question.length}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
 
-                                  Text(quranModel.question[0].question)
+                                  Text(widget.question[questionNumber].question)
                               ],
                             ),
                           ),
